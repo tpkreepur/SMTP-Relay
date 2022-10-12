@@ -1,0 +1,33 @@
+
+maillog_file = /dev/stdout
+smtp_helo_name = {{ .Env.POSTFIX_SMTP_HELO_NAME }}
+myorigin = {{ Env.POSTFIX_MYORIGIN }}
+smtp_banner = $myhostname ESMTP
+biff = no
+append_dot_mydomain = no
+readme_directory = no
+
+compatability_level = 2
+
+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+
+smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+myhostname = {{ .Env.POSTFIX_MYHOSTNAME }}
+relayhost = [smtp.office365.com]:587
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+mydomain = domain.com
+mynetworks = 127.0.0.0/8 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8
+inet_interfaces = all
+inet_protocols = ipv4
+smtp_use_tls = yes
+smtp_always_send_ehlo = yes
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+smtp_sasl_tls_security_options = noanonymous
+smtp_tls_security_level = encrypt
+smtp_generic_maps = hash:/etc/postfix/generic
+smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+header_size_limit = 409600
